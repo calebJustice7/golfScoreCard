@@ -1,10 +1,8 @@
 body {
     font-family: sans-serif;
     margin: 0;
+    height: 100%;
     background-image: url(../IMAGES/golf-background.jpeg);
-    background-size: fill;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 .card-wrapper {
@@ -16,16 +14,16 @@ body {
 .card {
     background-color: #dadfea;
     padding: 10px;
-    border-radius: 7px;
-    text-align: center;
+    width: 27%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.4em;
 }
 .card div {
     margin-bottom: 20px;
     margin-top: 5px;
-}
-.card img {
-    border-radius: 5px;
-    display: block;
 }
 .card button {
     border: none;
@@ -34,6 +32,7 @@ body {
     margin-top: 20px;
     cursor: pointer;
     outline: none;
+    width: 38%;
 }
 #hole-container {
     display: flex;
@@ -43,7 +42,11 @@ body {
     margin-top: 20px;
 }
 .hole-display {
-    font-size: 0.8em;
+    font-size: 0.86em;
     color: white;
     margin-bottom: 8px;
+}
+.selectTee {
+    margin-top: 10px;
+    width: 100px;
 }
