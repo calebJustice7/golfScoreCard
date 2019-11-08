@@ -1,5 +1,6 @@
 let courseId = [18300, 11819, 19002];
 let selectedCourse;
+let players = 0;
 
 function getCourseList() {
     return new Promise((resolve, reject) => {
@@ -39,14 +40,24 @@ function getCourseInfo(id, event) {
     }
 }
 
-function selectedTeeType(event) {
-    $(event.target.parentNode).animate({
-        opacity: 0
-    }, 300, function() {
-        event.target.parentNode.display = "none";
-        renderHoles();
-        $(".card-wrapper").hide();
-    })
+function renderCourseList(APIcourse) {
+    let html = "<div class='card-wrapper'>";
+    for(course in APIcourse.courses) {
+        let courseNameList = APIcourse.courses[course].name;
+        let courseImage = APIcourse.courses[course].image;
+        let courseId = APIcourse.courses[course].id;
+        html += `<div class="card">
+                    <div>${courseNameList}</div>
+                    <img style="width: 350px; height: 250px" src="${courseImage}"/>
+                    <button onclick="getCourseInfo(${courseId}, event)">Select Tee Type</button>
+                    <select id="select${courseId}" onchange="selectedTeeType(event)" class="selectTee">
+                        
+                    </select>
+                </div>`;
+    }
+
+    $("#course-chooser").html(html);
+
 }
 
 function getThisCourse(course, id,  event) {
@@ -72,43 +83,67 @@ function getThisCourse(course, id,  event) {
 
 function renderHoles() {
     let firstNine;
+    firstNine += "<div class='title'>Holes</div>"
     for(let hole in selectedCourse.data.holes){
-            firstNine += `
+        firstNine += `
             <div id="hole${hole}">
-                <div class="hole-display">Hole</div>
-                <div>${selectedCourse.data.holes[hole].hole}</div>
+                <div class="square">${selectedCourse.data.holes[hole].hole}</div>
             </div>`;
     }
     document.getElementById("hole-container").innerHTML = firstNine;
-    document.getElementById("hole8").outerHTML += `<div id="out-label">
+    document.getElementById("hole8").outerHTML += `<div class="label" id="out-label">
                                                                 <div>OUT</div>
                                                             </div>`;
-    document.getElementById("hole17").outerHTML += `<div id="in-label">
+    document.getElementById("hole17").outerHTML += `<div class="label" id="in-label">
                                                                    <div>IN</div>
                                                                 </div>`;
     document.getElementById("in-label").outerHTML += `<div>
-                                                                    <div id="total-label">TOTAL</div>
-                                                                </div>`
+                                                                    <div class="label" id="total-label">TOTAL</div>
+                                                                </div>`;
     document.getElementById("hole-container").firstChild.remove();
 }
 
-function renderCourseList(APIcourse) {
-    let html = "<div class='card-wrapper'>";
-    for(course in APIcourse.courses) {
-        let courseNameList = APIcourse.courses[course].name;
-        let courseImage = APIcourse.courses[course].image;
-        let courseId = APIcourse.courses[course].id;
-        html += `<div class="card">
-                    <div>${courseNameList}</div>
-                    <img style="width: 350px; height: 250px" src="${courseImage}"/>
-                    <button onclick="getCourseInfo(${courseId}, event)">Select Tee Type</button>
-                    <select id="select${courseId}" onchange="selectedTeeType(event)" class="selectTee">
-                        
-                    </select>
-                </div>`;
-    }
-
-
-    $("#course-chooser").html(html);
+function selectedTeeType(event) {
+    $(event.target.parentNode).animate({
+        opacity: 0
+    }, 300, function() {
+        event.target.parentNode.display = "none";
+        renderHoles();
+        $(".card-wrapper").hide();
+    })
 }
+
+document.getElementById("add-player").addEventListener("click", function() {
+    renderPlayers();
+})
+
+function renderPlayers() {
+    if(players < 4) {
+        players += 1;
+        console.log(players);
+        let playersHTML;
+        playersHTML += `<div class='title' contenteditable='true'>Player${players}</div>`;
+        for (let hole in selectedCourse.data.holes) {
+            playersHTML += `
+                   <div id="player${players}${hole}">
+                        <div class="square" contenteditable="true">0</div>
+                    </div>
+                    `;
+        }
+        document.getElementById(`players-container${players}`).innerHTML = playersHTML;
+        document.getElementById(`players-container${players}`).firstChild.remove();
+        document.getElementById(`player${players}8`).outerHTML += `<div class="label" id="player${players}-out">
+                                                                <div>0</div>
+                                                            </div>`;
+        document.getElementById(`player${players}17`).outerHTML += `<div class="label" id="player${players}-in">
+                                                                   <div>0</div>
+                                                                </div>`;
+        document.getElementById(`player${players}-in`).outerHTML += `<div>
+                                                                    <div class="label" id="player1-total">0</div>
+                                                                </div>`;
+    } else {
+        alert("Max of 4 players!");
+    }
+}
+
 
