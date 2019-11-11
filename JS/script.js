@@ -1,6 +1,7 @@
 let courseId = [18300, 11819, 19002];
 let selectedCourse;
 let players = 0;
+let playerIndex;
 
 function getCourseList() {
     return new Promise((resolve, reject) => {
@@ -120,13 +121,12 @@ document.getElementById("add-player").addEventListener("click", function() {
 function renderPlayers() {
     if(players < 4) {
         players += 1;
-        console.log(players);
         let playersHTML;
         playersHTML += `<div class='title' contenteditable='true'>Player${players}</div>`;
         for (let hole in selectedCourse.data.holes) {
             playersHTML += `
                    <div id="player${players}${hole}">
-                        <div class="square" contenteditable="true">0</div>
+                        <div class="square" onclick="renderPlayerScore(event)" contenteditable="true">0</div>
                     </div>
                     `;
         }
@@ -139,11 +139,38 @@ function renderPlayers() {
                                                                    <div>0</div>
                                                                 </div>`;
         document.getElementById(`player${players}-in`).outerHTML += `<div>
-                                                                    <div class="label" id="player1-total">0</div>
+                                                                    <div class="label" id="player${players}-total">0</div>
                                                                 </div>`;
+        pCollection.add(`player${players}`)
+
+        for(let i = 0; i < 18; i++) {
+            pCollection.collection[players - 1].add(0);
+        }
+
     } else {
-        alert("Max of 4 players!");
+        console.log("Max of 4 players!");
     }
+}
+
+function renderPlayerScore(event) {
+        let holeScore = event.target.innerText;
+        playerIndex = event.target.parentNode.id.charAt(6);
+        let x = event.target.parentNode.id;
+        let holeIndex;
+        if(x.length === 8) {
+            holeIndex = x.charAt(7);
+        }
+        else if(x.length == 9) {
+            holeIndex = x.slice(7, 9);
+        }
+        let scores = pCollection.collection[playerIndex - 1].scores;
+        scores[holeIndex] = Number(holeScore);
+        let addedScores = scores.reduce((a, b) => a + b, 0);
+        document.getElementById(`player${playerIndex}-total`).innerHTML = addedScores;
+
+        for(let i = 0; i < 9; i++) {
+            console.log(document.getElementById(`player${playerIndex}i`));
+        }
 }
 
 
