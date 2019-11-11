@@ -2,6 +2,7 @@ let courseId = [18300, 11819, 19002];
 let selectedCourse;
 let players = 0;
 let playerIndex;
+let selectedCourseTeeType;
 
 function getCourseList() {
     return new Promise((resolve, reject) => {
@@ -51,7 +52,7 @@ function renderCourseList(APIcourse) {
                     <div>${courseNameList}</div>
                     <img style="width: 350px; height: 250px" src="${courseImage}"/>
                     <button onclick="getCourseInfo(${courseId}, event)">Select Tee Type</button>
-                    <select id="select${courseId}" onchange="selectedTeeType(event)" class="selectTee">
+                    <select style="display: none;" id="select${courseId}" onchange="selectedTeeType(event)" class="selectTee">
                         
                     </select>
                 </div>`;
@@ -72,14 +73,11 @@ function getThisCourse(course, id,  event) {
 
     document.getElementById(`select${id}`).innerHTML += teeType;
 
-    $(".card").slideUp(350);
-    $(event.target.parentNode).slideDown(350);
 
-    setTimeout(function() {
-        $(event.target).hide();
-        $(".card").hide();
-        $(event.target).parent().show();
-    }, 350);
+    $(event.target).hide();
+    $(".card").hide();
+    $(event.target).parent().show();
+    $(event.target.nextSibling.nextSibling).show();
 }
 
 function renderHoles() {
@@ -91,6 +89,7 @@ function renderHoles() {
                 <div class="square">${selectedCourse.data.holes[hole].hole}</div>
             </div>`;
     }
+    firstNine += "<div>";
     document.getElementById("hole-container").innerHTML = firstNine;
     document.getElementById("hole8").outerHTML += `<div class="label" id="out-label">
                                                                 <div>OUT</div>
@@ -102,6 +101,8 @@ function renderHoles() {
                                                                     <div class="label" id="total-label">TOTAL</div>
                                                                 </div>`;
     document.getElementById("hole-container").firstChild.remove();
+
+    renderPar();
 }
 
 function selectedTeeType(event) {
@@ -112,11 +113,63 @@ function selectedTeeType(event) {
         renderHoles();
         $(".card-wrapper").hide();
     })
+    selectedCourseTeeType = event.srcElement.value;
 }
 
-document.getElementById("add-player").addEventListener("click", function() {
+function renderPar() {
+    let html = "<div class='title'>Par</div>";
+    let teeTypesArray = [];
+    for(let i = 0; i < 18; i++) {
+        let y = selectedCourse.data.holes[i].teeBoxes;
+        let z;
+        for(let j = 0; j < y.length; j++) {
+            z = y[j].teeType;
+            teeTypesArray.push(z);
+        }
+    }
+
+    teeTypesArray.length = selectedCourse.data.holes[0].teeBoxes.length;
+    let teeIndex = teeTypesArray.indexOf(selectedCourseTeeType);
+
+    let totalPar = 0;
+    let outPar = 0;
+    let inPar = 0;
+    for(let hole in selectedCourse.data.holes) {
+        html += `<div id="parDisplay${hole}">
+                    <div class="square">${selectedCourse.data.holes[hole].teeBoxes[teeIndex].par}</div>
+                </div>`;
+
+        totalPar += selectedCourse.data.holes[hole].teeBoxes[teeIndex].par;
+    }
+
+    for(let i = 0; i < 9; i++) {
+        outPar += selectedCourse.data.holes[i].teeBoxes[teeIndex].par;
+    }
+    for(let i = 9; i < 18; i++) {
+        inPar += selectedCourse.data.holes[i].teeBoxes[teeIndex].par;
+    }
+
+    html += "<div>";
+
+    document.getElementById("par-container").innerHTML = html;
+
+    document.getElementById("parDisplay8").outerHTML += `<div class="label" id="out-par-total">
+                                                                        <div>${outPar}</div>
+                                                                    </div>`;
+    document.getElementById("parDisplay17").outerHTML += `<div class="label" id="in-par-total">
+                                                                        <div>${inPar}</div>
+                                                                    </div>`;
+    document.getElementById("in-par-total").outerHTML += `<div>
+                                                                        <div class="label" id="par-total-label">${totalPar}</div>
+                                                                    </div>`;
+}
+
+
+document.getElementById("add-player").addEventListener("click",function(){
     renderPlayers();
-})
+});
+
+
 
 function renderPlayers() {
     if(players < 4) {
@@ -153,24 +206,23 @@ function renderPlayers() {
 }
 
 function renderPlayerScore(event) {
-        let holeScore = event.target.innerText;
-        playerIndex = event.target.parentNode.id.charAt(6);
-        let x = event.target.parentNode.id;
-        let holeIndex;
-        if(x.length === 8) {
-            holeIndex = x.charAt(7);
-        }
-        else if(x.length == 9) {
-            holeIndex = x.slice(7, 9);
-        }
-        let scores = pCollection.collection[playerIndex - 1].scores;
-        scores[holeIndex] = Number(holeScore);
-        let addedScores = scores.reduce((a, b) => a + b, 0);
-        document.getElementById(`player${playerIndex}-total`).innerHTML = addedScores;
-
-        for(let i = 0; i < 9; i++) {
-            console.log(document.getElementById(`player${playerIndex}i`));
+        if(isNaN(event.target.innerText)) {
+            console.log("enter a number");
+            event.target.innerText = "0";
+        } else {
+            let holeScore = event.target.innerText;
+            playerIndex = event.target.parentNode.id.charAt(6);
+            let x = event.target.parentNode.id;
+            let holeIndex;
+            if(x.length === 8) {
+                holeIndex = x.charAt(7);
+            }
+            else if(x.length == 9) {
+                holeIndex = x.slice(7, 9);
+            }
+            let scores = pCollection.collection[playerIndex - 1].scores;
+            scores[holeIndex] = Number(holeScore);
+            let addedScores = scores.reduce((a, b) => a + b, 0);
+            document.getElementById(`player${playerIndex}-total`).innerHTML = addedScores;
         }
 }
-
-
