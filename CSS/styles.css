@@ -77,6 +77,12 @@ body {
     justify-content: space-around;
     text-align: center;
 }
+#yard-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+}
 .title {
     width: 150px;
     padding: 15px;

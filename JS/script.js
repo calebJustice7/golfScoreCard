@@ -3,6 +3,8 @@ let selectedCourse;
 let players = 0;
 let playerIndex;
 let selectedCourseTeeType;
+let teeTypesArray = [];
+let teeIndex;
 
 function getCourseList() {
     return new Promise((resolve, reject) => {
@@ -118,7 +120,6 @@ function selectedTeeType(event) {
 
 function renderPar() {
     let html = "<div class='title'>Par</div>";
-    let teeTypesArray = [];
     for(let i = 0; i < 18; i++) {
         let y = selectedCourse.data.holes[i].teeBoxes;
         let z;
@@ -129,7 +130,7 @@ function renderPar() {
     }
 
     teeTypesArray.length = selectedCourse.data.holes[0].teeBoxes.length;
-    let teeIndex = teeTypesArray.indexOf(selectedCourseTeeType);
+    teeIndex = teeTypesArray.indexOf(selectedCourseTeeType);
 
     let totalPar = 0;
     let outPar = 0;
@@ -162,11 +163,52 @@ function renderPar() {
     document.getElementById("in-par-total").outerHTML += `<div>
                                                                         <div class="label" id="par-total-label">${totalPar}</div>
                                                                     </div>`;
+
+    renderYardage();
 }
+
+function renderYardage() {
+
+  let html = `<div class='title'>Yardage(${selectedCourseTeeType})</div>`;
+  for(let hole in selectedCourse.data.holes) {
+      html += `<div id="yard${hole}">
+                    <div class="square">${selectedCourse.data.holes[hole].teeBoxes[teeIndex].yards}</div>
+                </div>`;
+  }
+
+  let outYards = 0;
+  let inYards = 0;
+  let totalYards = 0;
+
+  for(let i = 0; i < 9; i++) {
+      outYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
+  }
+
+  for(let i = 9; i < 18; i++) {
+      inYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
+  }
+
+  totalYards = inYards + outYards;
+
+
+  html += "<div>";
+  document.getElementById("yard-container").innerHTML = html;
+
+    document.getElementById("yard8").outerHTML += `<div class="label" id="out-yard-total">
+                                                                        <div>${outYards}</div>
+                                                                    </div>`;
+    document.getElementById("yard17").outerHTML += `<div class="label" id="in-yard-total">
+                                                                        <div>${inYards}</div>
+                                                                    </div>`;
+    document.getElementById("in-yard-total").outerHTML += `<div>
+                                                                        <div class="label" id="yard-total-label">${totalYards}</div>
+                                                                    </div>`;
+};
 
 
 document.getElementById("add-player").addEventListener("click",function(){
     renderPlayers();
+
 });
 
 
@@ -179,7 +221,7 @@ function renderPlayers() {
         for (let hole in selectedCourse.data.holes) {
             playersHTML += `
                    <div id="player${players}${hole}">
-                        <div class="square" onclick="renderPlayerScore(event)" contenteditable="true">0</div>
+                        <div class="square" onkeyup="renderPlayerScore(event)" contenteditable="true"></div>
                     </div>
                     `;
         }
@@ -208,21 +250,37 @@ function renderPlayers() {
 function renderPlayerScore(event) {
         if(isNaN(event.target.innerText)) {
             console.log("enter a number");
-            event.target.innerText = "0";
-        } else {
-            let holeScore = event.target.innerText;
-            playerIndex = event.target.parentNode.id.charAt(6);
-            let x = event.target.parentNode.id;
-            let holeIndex;
-            if(x.length === 8) {
-                holeIndex = x.charAt(7);
-            }
-            else if(x.length == 9) {
-                holeIndex = x.slice(7, 9);
-            }
-            let scores = pCollection.collection[playerIndex - 1].scores;
-            scores[holeIndex] = Number(holeScore);
-            let addedScores = scores.reduce((a, b) => a + b, 0);
-            document.getElementById(`player${playerIndex}-total`).innerHTML = addedScores;
+            event.target.innerText = "";
+        }
+        else if(event.keyCode === 39 || event.keyCode === 37 || event.keyCode === 8) {
+            console.log("enter characters");
+        }
+        else {
+                let holeScore = event.target.innerText;
+                playerIndex = event.target.parentNode.id.charAt(6);
+                let x = event.target.parentNode.id;
+                let holeIndex;
+                if (x.length === 8) {
+                    holeIndex = x.charAt(7);
+                } else if (x.length == 9) {
+                    holeIndex = x.slice(7, 9);
+                }
+                let scores = pCollection.collection[playerIndex - 1].scores;
+                scores[holeIndex] = Number(holeScore);
+                let addedScores = scores.reduce((a, b) => a + b, 0);
+                document.getElementById(`player${playerIndex}-total`).innerHTML = addedScores;
+                event.target.innerText = holeScore;
+
+                let outScore = 0;
+                let inScore = 0;
+
+                for(let i = 0; i < 9; i++) {
+                    outScore += scores[i];
+                }
+                for(let i = 9; i < 18; i++) {
+                    inScore += scores[i];
+                }
+                document.getElementById(`player${playerIndex}-out`).innerText = outScore;
+                document.getElementById(`player${playerIndex}-in`).innerText = inScore;
         }
 }
