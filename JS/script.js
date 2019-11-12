@@ -83,6 +83,7 @@ function getThisCourse(course, id,  event) {
 }
 
 function renderHoles() {
+    document.getElementById("course-title").innerHTML = selectedCourse.data.name;
     let firstNine;
     firstNine += "<div class='title'>Holes</div>"
     for(let hole in selectedCourse.data.holes){
@@ -104,6 +105,8 @@ function renderHoles() {
                                                                 </div>`;
     document.getElementById("hole-container").firstChild.remove();
 
+    document.getElementById("add-player").style.display = "block";
+    document.getElementById("gear").style.display = "block";
     renderPar();
 }
 
