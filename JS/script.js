@@ -1,3 +1,7 @@
+document.querySelector("body").onresize = function() {
+    mobileShow();
+}
+
 function mobileShow(){
     if(screen.width >= 900) {
         $("#show-players").hide();
@@ -120,14 +124,18 @@ function renderCourseList(APIcourse) {
 }
 
 function mainScreen(event) {
-    $(".card").show(200);
+    $(".card").show(400);
     $(".fa-arrow-left").hide();
-    $(".selectTeeBtn").show(200);
+    $(".selectTeeBtn").show(400);
     $(".selectTee").hide();
     for(let i = 0; i < 3; i++) {
         let el = document.getElementById(`select${courseId[i]}`);
         el.innerHTML = "";
     }
+    if(screen.width < 900){
+        $("body").css("height", "1300px");
+    }
+
 }
 
 function getThisCourse(event) {
@@ -143,15 +151,21 @@ function getThisCourse(event) {
     document.getElementById(`select${id}`).innerHTML += teeType;
 
     if(event) {
-        $(event.target).hide();
-        $(".card").hide(80);
-        $(event.target).parent().show(80);
-        $(event.target.nextSibling.nextSibling).show(80);
-        $(".fa-arrow-left").show(80);
+        if(screen.width < 900) {
+            $("body").css("height", "800px");
+        }
+        $(event.target).hide(200);
+        $(".card").hide(200);
+        $(event.target).parent().show(200);
+        $(event.target.nextSibling.nextSibling).show(200);
+        $(".fa-arrow-left").show(200);
     }
 }
 
 function renderHoles() {
+    if(screen.width < 900) {
+        $("body").css("height", "1100px");
+    }
     mobileShow();
     document.getElementById("course-title").innerHTML = selectedCourse.data.name;
     let firstNine;
@@ -505,7 +519,7 @@ function sendNote(index) {
     }, 250, function(){
         setTimeout(function() {
             $("#message").animate({
-                marginLeft: "-400"
+                marginLeft: "-450"
             }, 200)
         }, 1500)
     });
