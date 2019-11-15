@@ -197,6 +197,7 @@ function selectedTeeType(event) {
 }
 
 function renderPar() {
+    $("#player-count").show();
     $("#par-container").slideUp(0);
     let html = "<div class='title'>Par</div>";
     for(let i = 0; i < 18; i++) {
@@ -335,7 +336,7 @@ document.getElementById("add-player").addEventListener("click",function(){
 function renderPlayers() {
     if(players < 4) {
         players += 1;
-
+        $("#player-count").html("Players: " + players);
         let width = screen.width;
 
         nameArr.push(`player${players}`);

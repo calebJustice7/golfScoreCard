@@ -229,3 +229,9 @@ body {
     margin-bottom: 13px;
     display: none;
 }
+#player-count {
+    color: white;
+    text-align: center;
+    margin: 15px 0;
+    display: none;
+}
