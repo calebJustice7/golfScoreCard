@@ -1,0 +1,32 @@
+@media only screen and (max-width: 900px) {
+    .card-wrapper {
+        flex-direction: column;
+    }
+    .card {
+        width: 60%;
+        margin-bottom: 50px;
+    }
+    .card img {
+        height: 200px;
+    }
+    #title {
+        font-size: 0.7em;
+    }
+    #container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+
+    }
+    #hole-container{
+        margin-top: 0;
+    }
+    .title, .square, .label {
+        padding: 10px 10px;
+        width: 65px;
+        overflow: scroll;
+    }
+    #hole-container, #par-container, #yard-container, #hdc-container {
+        flex-direction: column;
+    }
+}

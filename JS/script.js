@@ -68,7 +68,7 @@ function renderCourseList(APIcourse) {
         html += `<div class="card">
                     <i class="fas fa-arrow-left" onclick="mainScreen(event)"></i>
                     <div>${courseNameList}</div>
-                    <img style="width: 350px; height: 250px" src="${courseImage}"/>
+                    <img src="${courseImage}"/>
                     <button onclick="getCourseInfo(${courseId}, event)" class="selectTeeBtn">Select Tee Type</button>
                     <select style="display: none;" id="select${courseId}" onchange="selectedTeeType(event)" class="selectTee">
                         
@@ -82,9 +82,9 @@ function renderCourseList(APIcourse) {
 }
 
 function mainScreen(event) {
-    $(".card").show(80);
+    $(".card").show(200);
     $(".fa-arrow-left").hide();
-    $(".selectTeeBtn").show(80);
+    $(".selectTeeBtn").show(200);
     $(".selectTee").hide();
     for(let i = 0; i < 3; i++) {
         let el = document.getElementById(`select${courseId[i]}`);
@@ -335,8 +335,40 @@ function changeName(event){
     if(event.keyCode == 13) {
         playerIndex = event.target.nextSibling.nextSibling.id.charAt(6);
         let newName = event.target.value;
-        nameArr[playerIndex-1] = newName;
-        console.log(nameArr);
+
+        if(playerIndex == 1) {
+            if(nameArr[1] === newName || nameArr[2] === newName || nameArr[3] === newName) {
+                console.log("name taken");
+                event.target.value = "";
+            } else {
+                nameArr[0] = newName;
+                console.log(nameArr);
+            }
+        } else if(playerIndex == 2) {
+            if(nameArr[0] === newName || nameArr[2] === newName || nameArr[3] === newName) {
+                console.log("name taken");
+                event.target.value = "";
+            } else {
+                nameArr[1] = newName;
+                console.log(nameArr);
+            }
+        } else if(playerIndex == 3) {
+            if(nameArr[0] === newName || nameArr[1] === newName || nameArr[3] == newName) {
+                console.log("name taken");
+                event.target.value = "";
+            } else {
+                nameArr[2] = newName;
+                console.log(nameArr);
+            }
+        } else if(playerIndex == 4) {
+            if(nameArr[0] === newName || nameArr[1] === newName || nameArr[2] === newName) {
+                console.log("name taken");
+                event.target.value = "";
+            } else {
+                nameArr[3] = newName;
+                console.log(nameArr);
+            }
+        }
     }
 }
 
@@ -344,6 +376,7 @@ function renderPlayerScore(event) {
     if(isNaN(event.target.innerText)) {
         console.log("enter a number");
         event.target.innerText = "";
+
     }
     else if(event.keyCode === 39 || event.keyCode === 37 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 32) {
         console.log("enter characters");
@@ -429,23 +462,17 @@ function finalMessage(event){
         for(let i = 0; i < holes.length; i++) {
             parArray.push(holes[i].teeBoxes[teeIndex].par);
         }
-
         for(let i = 0; i < parArray.length; i++){
             totalPar += parArray[i];
         }
-
         for(let i = 0; i < holes.length; i++) {
             scoreArray.push(pCollection.collection[playerIndex - 1].scores[i]);
         }
-
         for(let i = 0; i < scoreArray.length; i++) {
             totalScore += scoreArray[i];
         }
-
         let parOffset = totalPar - totalScore;
-
         let message;
-
         if(parOffset > 0) {
             message = "Total Score! Above Par Congrats! +" + parOffset;
         } else if(parOffset === 0) {
@@ -453,7 +480,6 @@ function finalMessage(event){
         } else {
             message = "Total Score! Behind Par " + parOffset;
         }
-
         let allScoresEntered = false;
         let scoresNot0 = 0;
         for(let i = 0; i < scoreArray.length -1; i++) {
@@ -464,7 +490,6 @@ function finalMessage(event){
                 allScoresEntered = true;
             }
         }
-
         if(allScoresEntered === true) {
             $("#message").html(message);
             $("#message").animate({

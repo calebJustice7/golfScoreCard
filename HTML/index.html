@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Golf ScoreCard</title>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="../JS/model.js" defer></script>
     <script src="../JS/script.js" defer></script>
     <script src="https://kit.fontawesome.com/0704771d8f.js"></script>
     <link href="../CSS/styles.css" rel="stylesheet" type="text/css" />
+    <link href="../CSS/mediaQ.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="container">
     <div id="course-chooser">
 
     </div>
+    <div id="title">
+        <button id="add-player">Add Player</button>
+        <div id="course-title"></div>
+        <i id="gear" class="fas fa-cog" onclick="modal()"></i>
+    </div>
+    <div id="show-players">Show Players</div>
     <div id="container">
-        <div id="title">
-            <button id="add-player">Add Player</button>
-            <div id="course-title"></div>
-            <i id="gear" class="fas fa-cog" onclick="modal()"></i>
-        </div>
         <div id="hole-container"></div>
         <div id="par-container"></div>
         <div id="yard-container"></div>
@@ -34,7 +38,8 @@
     <div id="modal-content-wrapper">
         <div id="modal-content">
             <div id="close" onclick="closeModal()">x</div>
-        </div>
+            
+        </div> 
     </div>
 </div>
 

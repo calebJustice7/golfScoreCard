@@ -46,6 +46,8 @@ body {
 }
 .card img {
     border-radius: 3px;
+    width: 90%;
+    height: 250px;
 }
 
 .card select {
@@ -168,7 +170,7 @@ body {
     cursor: pointer;
 }
 #message {
-    background-color: darkgoldenrod;
+    background-color: #59c441;
     color: white;
     text-align: center;
     font-size: 1.3em;
@@ -176,7 +178,7 @@ body {
     width: 350px;
     border-radius: 10px;
     position: absolute;
-    top: 300px;
+    top: 232px;
 }
 #modal-container {
     width: 100%;
@@ -213,4 +215,16 @@ body {
 }
 #container {
     position: relative;
+}
+
+#show-players {
+    color: white;
+    text-align: center;
+    background-color: #59c441;
+    border-radius: 5px;
+    padding: 5px 8px;
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 13px;
 }
