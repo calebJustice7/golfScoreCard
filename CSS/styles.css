@@ -217,7 +217,7 @@ body {
     position: relative;
 }
 
-#show-players {
+#show-players, #hide-players {
     color: white;
     text-align: center;
     background-color: #59c441;
@@ -227,4 +227,5 @@ body {
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 13px;
+    display: none;
 }

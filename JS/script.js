@@ -1,3 +1,35 @@
+function mobileShow(){
+    if(screen.width >= 900) {
+        $("#show-players").hide();
+    } else {
+        $("#show-players").show();
+    }
+}
+
+$("#show-players").click(function() {
+    for(let i = 1; i < players + 1; i++){
+        document.getElementById(`players-container${i}`).style.display = "flex";
+        $("#hole-container").hide();
+        $("#par-container").hide();
+        $("#hdc-container").hide();
+        $("#yard-container").hide();
+        $("#show-players").hide();
+        $("#hide-players").show();
+    }
+})
+
+$("#hide-players").click(function() {
+    for(let i = 1; i < players + 1; i++) {
+        document.getElementById(`players-container${i}`).style.display = "none";
+        $("#hole-container").show();
+        $("#par-container").show();
+        $("#hdc-container").show();
+        $("#yard-container").show();
+        $("#hide-players").hide();
+        $("#show-players").show();
+    }
+})
+
 $("#modal-container").fadeOut(0);
 
 function modal() {
@@ -8,9 +40,15 @@ function closeModal() {
     $("#modal-container").fadeOut(400);
 }
 
-$("#message").animate({
-    marginLeft: "-450"
-}, 0);
+if(screen.width >= 900) {
+    $("#message").animate({
+        marginLeft: "-450"
+    }, 0);
+} else {
+    $("#message").animate({
+        marginLeft: "-400"
+    }, 0);
+}
 
 let courseId = [18300, 11819, 19002];
 let selectedCourse;
@@ -114,6 +152,7 @@ function getThisCourse(event) {
 }
 
 function renderHoles() {
+    mobileShow();
     document.getElementById("course-title").innerHTML = selectedCourse.data.name;
     let firstNine;
     firstNine += "<div class='title'>Holes</div>"
@@ -296,6 +335,9 @@ document.getElementById("add-player").addEventListener("click",function(){
 function renderPlayers() {
     if(players < 4) {
         players += 1;
+
+        let width = screen.width;
+
         nameArr.push(`player${players}`);
         let playersHTML;
         playersHTML += `<input class='title' type="text" onkeyup="changeName(event)" placeholder="Player${players}" />`;
@@ -324,6 +366,16 @@ function renderPlayers() {
 
         for(let i = 0; i < 18; i++) {
             pCollection.collection[players - 1].add(0);
+        }
+
+        if(width < 900) {
+            if(document.getElementById("hole-container").style.display == "none"){
+                console.log("blah");
+            } else {
+                for(let i = 1; i < players + 1; i++) {
+                    document.getElementById(`players-container${i}`).style.display = "none";
+                }
+            }
         }
 
     } else {
@@ -438,13 +490,21 @@ function sendNote(index) {
 
     let offset = parArray[index] - playerScore[index];
 
+    let left = "";
+
+    if(screen.width >= 900) {
+        left = "500";
+    } else {
+        left = "40";
+    }
+
     $("#message").html(message + ". " + offset);
     $("#message").animate({
-        marginLeft: "500"
+        marginLeft: left
     }, 250, function(){
         setTimeout(function() {
             $("#message").animate({
-                marginLeft: "-500"
+                marginLeft: "-400"
             }, 200)
         }, 1500)
     });

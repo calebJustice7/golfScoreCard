@@ -16,6 +16,7 @@
         display: flex;
         align-items: center;
         padding: 10px;
+        width: 90%;
 
     }
     #hole-container{
@@ -28,5 +29,16 @@
     }
     #hole-container, #par-container, #yard-container, #hdc-container {
         flex-direction: column;
+    }
+    #players-container1, #players-container2, #players-container3, #players-container4 {
+        flex-direction: column;
+    }
+    #players-container1 {
+        margin-top: 0;
+    }
+    #message {
+        top: 0px;
+        font-size: 0.8em;
+        width: 200px;
     }
 }
