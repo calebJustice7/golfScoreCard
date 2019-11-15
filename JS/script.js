@@ -1,17 +1,13 @@
-document.querySelector("body").onresize = function() {
-    mobileShow();
-}
-
-function mobileShow(){
-    if(screen.width >= 900) {
-        $("#show-players").hide();
+function mobileShow() {
+    if (screen.width >= 900) {
+        $("#show-players").hide(); 
     } else {
         $("#show-players").show();
     }
 }
 
-$("#show-players").click(function() {
-    for(let i = 1; i < players + 1; i++){
+$("#show-players").click(function () {
+    for (let i = 1; i < players + 1; i++) {
         document.getElementById(`players-container${i}`).style.display = "flex";
         $("#hole-container").hide();
         $("#par-container").hide();
@@ -22,8 +18,8 @@ $("#show-players").click(function() {
     }
 })
 
-$("#hide-players").click(function() {
-    for(let i = 1; i < players + 1; i++) {
+$("#hide-players").click(function () {
+    for (let i = 1; i < players + 1; i++) {
         document.getElementById(`players-container${i}`).style.display = "none";
         $("#hole-container").show();
         $("#par-container").show();
@@ -44,7 +40,7 @@ function closeModal() {
     $("#modal-container").fadeOut(400);
 }
 
-if(screen.width >= 900) {
+if (screen.width >= 900) {
     $("#message").animate({
         marginLeft: "-450"
     }, 0);
@@ -67,13 +63,13 @@ let nameArr = [];
 function getCourseList() {
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if(this.status === 200 && this.readyState === 4) {
+        xhttp.onreadystatechange = function () {
+            if (this.status === 200 && this.readyState === 4) {
                 const COURSES = JSON.parse(this.responseText);
                 resolve(COURSES);
             }
         };
-        xhttp.open("GET", `https://golf-courses-api.herokuapp.com/courses` , true);
+        xhttp.open("GET", `https://golf-courses-api.herokuapp.com/courses`, true);
         xhttp.send();
     })
 }
@@ -85,7 +81,7 @@ getCourseList().then(courses => {
 getCourseList();
 
 function getCourseInfo(id, event) {
-    if(id) {
+    if (id) {
         return new Promise((resolve, reject) => {
             let x = new XMLHttpRequest();
             x.onreadystatechange = function () {
@@ -103,7 +99,7 @@ function getCourseInfo(id, event) {
 
 function renderCourseList(APIcourse) {
     let html = "<div class='card-wrapper'>";
-    for(course in APIcourse.courses) {
+    for (course in APIcourse.courses) {
         let courseNameList = APIcourse.courses[course].name;
         let courseImage = APIcourse.courses[course].image;
         let courseId = APIcourse.courses[course].id;
@@ -128,11 +124,11 @@ function mainScreen(event) {
     $(".fa-arrow-left").hide();
     $(".selectTeeBtn").show(400);
     $(".selectTee").hide();
-    for(let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
         let el = document.getElementById(`select${courseId[i]}`);
         el.innerHTML = "";
     }
-    if(screen.width < 900){
+    if (screen.width < 900) {
         $("body").css("height", "1300px");
     }
 
@@ -144,14 +140,14 @@ function getThisCourse(event) {
 
     let teeTypeArray = course.data.holes[0].teeBoxes;
     let teeType = "<option>Select A Tee Type</option>";
-    for(tee in teeTypeArray) {
+    for (tee in teeTypeArray) {
         teeType += `<option value="${teeTypeArray[tee].teeType}">${teeTypeArray[tee].teeType}</option>`;
     }
 
     document.getElementById(`select${id}`).innerHTML += teeType;
 
-    if(event) {
-        if(screen.width < 900) {
+    if (event) {
+        if (screen.width < 900) {
             $("body").css("height", "800px");
         }
         $(event.target).hide(200);
@@ -163,14 +159,15 @@ function getThisCourse(event) {
 }
 
 function renderHoles() {
-    if(screen.width < 900) {
+    mobileShow();
+    if (screen.width < 900) {
         $("body").css("height", "1100px");
     }
-    mobileShow();
+
     document.getElementById("course-title").innerHTML = selectedCourse.data.name;
     let firstNine;
     firstNine += "<div class='title'>Holes</div>"
-    for(let hole in selectedCourse.data.holes){
+    for (let hole in selectedCourse.data.holes) {
         firstNine += `
             <div id="hole${hole}">
                 <div class="square">${selectedCourse.data.holes[hole].hole}</div>
@@ -202,7 +199,7 @@ function renderHoles() {
 function selectedTeeType(event) {
     $(event.target.parentNode).animate({
         opacity: 0
-    }, 300, function() {
+    }, 300, function () {
         event.target.parentNode.display = "none";
         renderHoles();
         $(".card-wrapper").hide();
@@ -214,10 +211,10 @@ function renderPar() {
     $("#player-count").show();
     $("#par-container").slideUp(0);
     let html = "<div class='title'>Par</div>";
-    for(let i = 0; i < 18; i++) {
+    for (let i = 0; i < 18; i++) {
         let y = selectedCourse.data.holes[i].teeBoxes;
         let z;
-        for(let j = 0; j < y.length; j++) {
+        for (let j = 0; j < y.length; j++) {
             z = y[j].teeType;
             teeTypesArray.push(z);
         }
@@ -229,7 +226,7 @@ function renderPar() {
     let totalPar = 0;
     let outPar = 0;
     let inPar = 0;
-    for(let hole in selectedCourse.data.holes) {
+    for (let hole in selectedCourse.data.holes) {
         html += `<div id="parDisplay${hole}">
                     <div class="square">${selectedCourse.data.holes[hole].teeBoxes[teeIndex].par}</div>
                 </div>`;
@@ -237,10 +234,10 @@ function renderPar() {
         totalPar += selectedCourse.data.holes[hole].teeBoxes[teeIndex].par;
     }
 
-    for(let i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
         outPar += selectedCourse.data.holes[i].teeBoxes[teeIndex].par;
     }
-    for(let i = 9; i < 18; i++) {
+    for (let i = 9; i < 18; i++) {
         inPar += selectedCourse.data.holes[i].teeBoxes[teeIndex].par;
     }
 
@@ -266,7 +263,7 @@ function renderPar() {
 function renderYardage() {
 
     let html = `<div class='title'>Yardage(${selectedCourseTeeType})</div>`;
-    for(let hole in selectedCourse.data.holes) {
+    for (let hole in selectedCourse.data.holes) {
         html += `<div id="yard${hole}">
                     <div class="square">${selectedCourse.data.holes[hole].teeBoxes[teeIndex].yards}</div>
                 </div>`;
@@ -276,11 +273,11 @@ function renderYardage() {
     let inYards = 0;
     let totalYards = 0;
 
-    for(let i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
         outYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
     }
 
-    for(let i = 9; i < 18; i++) {
+    for (let i = 9; i < 18; i++) {
         inYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
     }
 
@@ -306,7 +303,7 @@ function renderYardage() {
 
 function renderHandicap() {
     let html = "<div class='title'>Handicap</div>";
-    for(let hole in selectedCourse.data.holes) {
+    for (let hole in selectedCourse.data.holes) {
         let hcp = selectedCourse.data.holes[hole].teeBoxes[teeIndex].hcp;
         html += `<div id="hdc${hole}">
                     <div class="square">${hcp}</div>
@@ -318,11 +315,11 @@ function renderHandicap() {
     let hcpOut = 0;
     let totalHcp = 0;
 
-    for(let i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
         hcpOut += selectedCourse.data.holes[i].teeBoxes[teeIndex].hcp;
     }
 
-    for(let i = 9; i < 18; i++) {
+    for (let i = 9; i < 18; i++) {
         hcpIn += selectedCourse.data.holes[i].teeBoxes[teeIndex].hcp;
     }
 
@@ -342,13 +339,13 @@ function renderHandicap() {
 }
 
 
-document.getElementById("add-player").addEventListener("click",function(){
+document.getElementById("add-player").addEventListener("click", function () {
     renderPlayers();
 
 });
 
 function renderPlayers() {
-    if(players < 4) {
+    if (players < 4) {
         players += 1;
         $("#player-count").html("Players: " + players);
         let width = screen.width;
@@ -379,15 +376,15 @@ function renderPlayers() {
             marginLeft: "0"
         }, 300);
 
-        for(let i = 0; i < 18; i++) {
+        for (let i = 0; i < 18; i++) {
             pCollection.collection[players - 1].add(0);
         }
 
-        if(width < 900) {
-            if(document.getElementById("hole-container").style.display == "none"){
-                console.log("blah");
+        if (width < 900) {
+            if (document.getElementById("hole-container").style.display == "none") {
+                // nothing
             } else {
-                for(let i = 1; i < players + 1; i++) {
+                for (let i = 1; i < players + 1; i++) {
                     document.getElementById(`players-container${i}`).style.display = "none";
                 }
             }
@@ -398,54 +395,50 @@ function renderPlayers() {
     }
 }
 
-function changeName(event){
-    if(event.keyCode == 13) {
+function changeName(event) {
+    if (event.keyCode == 13) {
         playerIndex = event.target.nextSibling.nextSibling.id.charAt(6);
         let newName = event.target.value;
 
-        if(playerIndex == 1) {
-            if(nameArr[1] === newName || nameArr[2] === newName || nameArr[3] === newName) {
-                console.log("name taken");
+        if (playerIndex == 1) {
+            if (nameArr[1] === newName || nameArr[2] === newName || nameArr[3] === newName) {
                 event.target.value = "";
             } else {
                 nameArr[0] = newName;
-                console.log(nameArr);
+                $(event.target).css("color", "black");
             }
-        } else if(playerIndex == 2) {
-            if(nameArr[0] === newName || nameArr[2] === newName || nameArr[3] === newName) {
-                console.log("name taken");
+        } else if (playerIndex == 2) {
+            if (nameArr[0] === newName || nameArr[2] === newName || nameArr[3] === newName) {
                 event.target.value = "";
             } else {
                 nameArr[1] = newName;
-                console.log(nameArr);
+                $(event.target).css("color", "black");
             }
-        } else if(playerIndex == 3) {
-            if(nameArr[0] === newName || nameArr[1] === newName || nameArr[3] == newName) {
-                console.log("name taken");
+        } else if (playerIndex == 3) {
+            if (nameArr[0] === newName || nameArr[1] === newName || nameArr[3] == newName) {
                 event.target.value = "";
             } else {
                 nameArr[2] = newName;
-                console.log(nameArr);
+                $(event.target).css("color", "black");
             }
-        } else if(playerIndex == 4) {
-            if(nameArr[0] === newName || nameArr[1] === newName || nameArr[2] === newName) {
-                console.log("name taken");
+        } else if (playerIndex == 4) {
+            if (nameArr[0] === newName || nameArr[1] === newName || nameArr[2] === newName) {
                 event.target.value = "";
             } else {
                 nameArr[3] = newName;
-                console.log(nameArr);
+                $(event.target).css("color", "black");
             }
         }
     }
 }
 
 function renderPlayerScore(event) {
-    if(isNaN(event.target.innerText)) {
+    if (isNaN(event.target.innerText)) {
         console.log("enter a number");
         event.target.innerText = "";
 
     }
-    else if(event.keyCode === 39 || event.keyCode === 37 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 32) {
+    else if (event.keyCode === 39 || event.keyCode === 37 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 32) {
         console.log("enter characters");
     }
     else {
@@ -467,10 +460,10 @@ function renderPlayerScore(event) {
         let outScore = 0;
         let inScore = 0;
 
-        for(let i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i++) {
             outScore += scores[i];
         }
-        for(let i = 9; i < 18; i++) {
+        for (let i = 9; i < 18; i++) {
             inScore += scores[i];
         }
         document.getElementById(`player${playerIndex}-out`).innerText = outScore;
@@ -485,16 +478,16 @@ function sendNote(index) {
     let playerScore = pCollection.collection[playerIndex - 1].scores;
     let holes = selectedCourse.data.holes;
     let parArray = [];
-    for(let i = 0; i < holes.length; i++) {
+    for (let i = 0; i < holes.length; i++) {
         parArray.push(holes[i].teeBoxes[teeIndex].par);
     }
 
     let message;
 
-    if(playerScore[index] == 1) {
+    if (playerScore[index] == 1) {
         message = "HOLE IN ONE!! Congrats";
     }
-    else if(parArray[index] == playerScore[index]) {
+    else if (parArray[index] == playerScore[index]) {
         message = "Nice! Right on par";
     }
     else if (parArray[index] > playerScore[index]) {
@@ -507,7 +500,7 @@ function sendNote(index) {
 
     let left = "";
 
-    if(screen.width >= 900) {
+    if (screen.width >= 900) {
         left = "500";
     } else {
         left = "40";
@@ -516,8 +509,8 @@ function sendNote(index) {
     $("#message").html(message + ". " + offset);
     $("#message").animate({
         marginLeft: left
-    }, 250, function(){
-        setTimeout(function() {
+    }, 250, function () {
+        setTimeout(function () {
             $("#message").animate({
                 marginLeft: "-450"
             }, 200)
@@ -525,52 +518,52 @@ function sendNote(index) {
     });
 }
 
-function finalMessage(event){
+function finalMessage(event) {
     let holeNum = Number(event.target.parentNode.id.charAt(8));
 
-    if(holeNum === 7) {
+    if (holeNum === 7) {
         let holes = selectedCourse.data.holes;
         let parArray = [];
         let totalPar = 0;
         let scoreArray = [];
         let totalScore = 0;
-        for(let i = 0; i < holes.length; i++) {
+        for (let i = 0; i < holes.length; i++) {
             parArray.push(holes[i].teeBoxes[teeIndex].par);
         }
-        for(let i = 0; i < parArray.length; i++){
+        for (let i = 0; i < parArray.length; i++) {
             totalPar += parArray[i];
         }
-        for(let i = 0; i < holes.length; i++) {
+        for (let i = 0; i < holes.length; i++) {
             scoreArray.push(pCollection.collection[playerIndex - 1].scores[i]);
         }
-        for(let i = 0; i < scoreArray.length; i++) {
+        for (let i = 0; i < scoreArray.length; i++) {
             totalScore += scoreArray[i];
         }
         let parOffset = totalPar - totalScore;
         let message;
-        if(parOffset > 0) {
+        if (parOffset > 0) {
             message = "Total Score! Above Par Congrats! +" + parOffset;
-        } else if(parOffset === 0) {
+        } else if (parOffset === 0) {
             message = "You Were right on par! Total Score!";
         } else {
             message = "Total Score! Behind Par " + parOffset;
         }
         let allScoresEntered = false;
         let scoresNot0 = 0;
-        for(let i = 0; i < scoreArray.length -1; i++) {
-            if(scoreArray[i] != 0) {
+        for (let i = 0; i < scoreArray.length - 1; i++) {
+            if (scoreArray[i] != 0) {
                 scoresNot0++;
             }
-            if(scoresNot0 == 17) {
+            if (scoresNot0 == 17) {
                 allScoresEntered = true;
             }
         }
-        if(allScoresEntered === true) {
+        if (allScoresEntered === true) {
             $("#message").html(message);
             $("#message").animate({
                 marginLeft: "500"
-            }, 250, function(){
-                setTimeout(function() {
+            }, 250, function () {
+                setTimeout(function () {
                     $("#message").animate({
                         marginLeft: "-500"
                     }, 200)

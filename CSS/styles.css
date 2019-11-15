@@ -235,3 +235,6 @@ body {
     margin: 15px 0;
     display: none;
 }
+input {
+    color: #dadfea;
+}
