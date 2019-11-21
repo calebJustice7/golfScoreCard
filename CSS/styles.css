@@ -1,5 +1,5 @@
 body {
-    font-family: sans-serif;
+    font-family: "Montserrat", sans-serif;
     margin: 0;
     height: 100%;
     background-image: url(../IMAGES/golf-background2.jpeg);
@@ -238,7 +238,7 @@ body {
     display: none;
 }
 input {
-    color: darkmagenta;
+    color: red;
 }
 #player1, #player2, #player3, #player4 {
     display: flex;

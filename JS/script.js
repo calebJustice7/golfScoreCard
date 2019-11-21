@@ -129,7 +129,7 @@ function mainScreen(event) {
         el.innerHTML = "";
     }
     if (screen.width < 900) {
-        $("body").css("height", "1300px");
+        $("body").css("height", "1400px");
     }
 
 }
@@ -161,7 +161,7 @@ function getThisCourse(event) {
 function renderHoles() {
     mobileShow();
     if (screen.width < 900) {
-        $("body").css("height", "1100px");
+        $("body").css("height", "1200px");
     }
 
     document.getElementById("course-title").innerHTML = selectedCourse.data.name;
@@ -314,9 +314,10 @@ document.getElementById("add-player").addEventListener("click", function () {
 function modalShowPlayers() {
     for(let i = 0; i < players; i++) {
         let state = pCollection.collection[i].active ? "far fa-check-circle" : "far fa-circle"
+        let activeState = pCollection.collection[i].active ? "Active" : "Not Active";
         document.getElementById(`player${i + 1}`).innerHTML = `
         <div>${nameArr[i]}</div>
-        <div>Active </div>
+        <div>${activeState}</div>
         <i class="${state}" onclick="changeState(event, ${i})" />
         `;
     }
@@ -324,14 +325,20 @@ function modalShowPlayers() {
 
 function changeState(event, i) {
     let className = event.target.className;
-    console.log(i);
     if(className === "far fa-check-circle") {
         pCollection.collection[i].active = false;
-        document.getElementById(`players-container${i + 1}`).style.display = "none";
+        let x = document.getElementById(`players-container${i + 1}`);
+        $(x).animate({
+            opacity: 0,
+            marginBottom: "-50px"
+        });
     } else {
         pCollection.collection[i].active = true;
-        $(`players-container${i + 1}`).show();
-        document.getElementById(`players-container${i + 1}`).style.display = "flex";
+        let x = document.getElementById(`players-container${i + 1}`);
+        $(x).animate({
+            opacity: 1,
+            marginBottom: "0px"
+        });
     }
     modalShowPlayers();
 }
