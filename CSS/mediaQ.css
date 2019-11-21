@@ -46,6 +46,7 @@
     }
     #modal-content-wrapper {
         width: 80%;
+        height: 55%;
     }
     #player1, #player2, #player3, #player4 {
         flex-direction: column;
