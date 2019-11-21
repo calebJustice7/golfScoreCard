@@ -115,6 +115,7 @@ body {
     align-items: center;
     justify-content: space-around;
     text-align: center;
+    margin-bottom: 147px;
 }
 .title {
     width: 150px;
@@ -198,6 +199,7 @@ body {
 }
 #modal-content{
     position: relative;
+    padding: 30px;
 }
 #close {
     font-size: 1.4em;
@@ -236,5 +238,21 @@ body {
     display: none;
 }
 input {
-    color: #dadfea;
+    color: darkmagenta;
+}
+#player1, #player2, #player3, #player4 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    font-size: 1.2em;
+    margin: 8px auto;
+}
+.fa-check-circle {
+    color: #30D158;
+    cursor: pointer;
+}
+.fa-circle {
+    color: red;
+    cursor: pointer;
 }

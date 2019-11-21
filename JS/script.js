@@ -1,6 +1,6 @@
 function mobileShow() {
     if (screen.width >= 900) {
-        $("#show-players").hide(); 
+        $("#show-players").hide();
     } else {
         $("#show-players").show();
     }
@@ -175,20 +175,12 @@ function renderHoles() {
     }
     firstNine += "<div>";
     document.getElementById("hole-container").innerHTML = firstNine;
-    document.getElementById("hole8").outerHTML += `<div class="label" id="out-label">
-                                                                <div>OUT</div>
-                                                            </div>`;
-    document.getElementById("hole17").outerHTML += `<div class="label" id="in-label">
-                                                                   <div>IN</div>
-                                                                </div>`;
-    document.getElementById("in-label").outerHTML += `<div>
-                                                                    <div class="label" id="total-label">TOTAL</div>
-                                                                </div>`;
+    document.getElementById("hole8").outerHTML += `<div class="label" id="out-label"><div>OUT</div></div>`;
+    document.getElementById("hole17").outerHTML += `<div class="label" id="in-label"><div>IN</div></div>`;
+    document.getElementById("in-label").outerHTML += `<div><div class="label" id="total-label">TOTAL</div></div>`;
     document.getElementById("hole-container").firstChild.remove();
-
     document.getElementById("add-player").style.display = "block";
     document.getElementById("gear").style.display = "block";
-
     $("#hole-container").slideUp(0);
     $("#hole-container").slideDown(400);
     $("#title").show();
@@ -245,23 +237,14 @@ function renderPar() {
 
     document.getElementById("par-container").innerHTML = html;
 
-    document.getElementById("parDisplay8").outerHTML += `<div class="label" id="out-par-total">
-                                                                        <div>${outPar}</div>
-                                                                    </div>`;
-    document.getElementById("parDisplay17").outerHTML += `<div class="label" id="in-par-total">
-                                                                        <div>${inPar}</div>
-                                                                    </div>`;
-    document.getElementById("in-par-total").outerHTML += `<div>
-                                                                        <div class="label" id="par-total-label">${totalPar}</div>
-                                                                    </div>`;
-
+    document.getElementById("parDisplay8").outerHTML += `<div class="label" id="out-par-total"><div>${outPar}</div></div>`;
+    document.getElementById("parDisplay17").outerHTML += `<div class="label" id="in-par-total"><div>${inPar}</div></div>`;
+    document.getElementById("in-par-total").outerHTML += `<div><div class="label" id="par-total-label">${totalPar}</div></div>`;
     $("#par-container").slideDown(400);
-
     renderYardage();
 }
 
 function renderYardage() {
-
     let html = `<div class='title'>Yardage(${selectedCourseTeeType})</div>`;
     for (let hole in selectedCourse.data.holes) {
         html += `<div id="yard${hole}">
@@ -276,26 +259,18 @@ function renderYardage() {
     for (let i = 0; i < 9; i++) {
         outYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
     }
-
     for (let i = 9; i < 18; i++) {
         inYards += Number(selectedCourse.data.holes[i].teeBoxes[teeIndex].yards);
     }
-
     totalYards = inYards + outYards;
 
 
     html += "<div>";
     document.getElementById("yard-container").innerHTML = html;
 
-    document.getElementById("yard8").outerHTML += `<div class="label" id="out-yard-total">
-                                                                        <div>${outYards}</div>
-                                                                    </div>`;
-    document.getElementById("yard17").outerHTML += `<div class="label" id="in-yard-total">
-                                                                        <div>${inYards}</div>
-                                                                    </div>`;
-    document.getElementById("in-yard-total").outerHTML += `<div>
-                                                                        <div class="label" id="yard-total-label">${totalYards}</div>
-                                                                    </div>`;
+    document.getElementById("yard8").outerHTML += `<div class="label" id="out-yard-total"><div>${outYards}</div></div>`;
+    document.getElementById("yard17").outerHTML += `<div class="label" id="in-yard-total"><div>${inYards}</div></div>`;
+    document.getElementById("in-yard-total").outerHTML += `<div><div class="label" id="yard-total-label">${totalYards}</div></div>`;
 
     renderHandicap();
 
@@ -327,29 +302,45 @@ function renderHandicap() {
 
     document.getElementById("hdc-container").innerHTML = html;
 
-    document.getElementById("hdc8").outerHTML += `<div class="label" id="out-hdc-total">
-                                                                        <div>${hcpOut}</div>
-                                                                    </div>`;
-    document.getElementById("hdc17").outerHTML += `<div class="label" id="in-hdc-total">
-                                                                        <div>${hcpIn}</div>
-                                                                    </div>`;
-    document.getElementById("in-hdc-total").outerHTML += `<div>
-                                                                        <div class="label" id="hdc-total-label">${totalHcp}</div>
-                                                                    </div>`;
+    document.getElementById("hdc8").outerHTML += `<div class="label" id="out-hdc-total"><div>${hcpOut}</div></div>`;
+    document.getElementById("hdc17").outerHTML += `<div class="label" id="in-hdc-total"><div>${hcpIn}</div></div>`;
+    document.getElementById("in-hdc-total").outerHTML += `<div><div class="label" id="hdc-total-label">${totalHcp}</div></div>`;
 }
-
-
 document.getElementById("add-player").addEventListener("click", function () {
     renderPlayers();
 
 });
+
+function modalShowPlayers() {
+    for(let i = 0; i < players; i++) {
+        let state = pCollection.collection[i].active ? "far fa-check-circle" : "far fa-circle"
+        document.getElementById(`player${i + 1}`).innerHTML = `
+        <div>${nameArr[i]}</div>
+        <div>Active </div>
+        <i class="${state}" onclick="changeState(event, ${i})" />
+        `;
+    }
+}
+
+function changeState(event, i) {
+    let className = event.target.className;
+    console.log(i);
+    if(className === "far fa-check-circle") {
+        pCollection.collection[i].active = false;
+        document.getElementById(`players-container${i + 1}`).style.display = "none";
+    } else {
+        pCollection.collection[i].active = true;
+        $(`players-container${i + 1}`).show();
+        document.getElementById(`players-container${i + 1}`).style.display = "flex";
+    }
+    modalShowPlayers();
+}
 
 function renderPlayers() {
     if (players < 4) {
         players += 1;
         $("#player-count").html("Players: " + players);
         let width = screen.width;
-
         nameArr.push(`player${players}`);
         let playersHTML;
         playersHTML += `<input class='title' type="text" onkeyup="changeName(event)" placeholder="Player${players}" />`;
@@ -362,15 +353,9 @@ function renderPlayers() {
         }
         document.getElementById(`players-container${players}`).innerHTML = playersHTML;
         document.getElementById(`players-container${players}`).firstChild.remove();
-        document.getElementById(`player${players}8`).outerHTML += `<div class="label" id="player${players}-out">
-                                                                <div>0</div>
-                                                            </div>`;
-        document.getElementById(`player${players}17`).outerHTML += `<div class="label" id="player${players}-in">
-                                                                   <div>0</div>
-                                                                </div>`;
-        document.getElementById(`player${players}-in`).outerHTML += `<div>
-                                                                    <div class="label" id="player${players}-total">0</div>
-                                                                </div>`;
+        document.getElementById(`player${players}8`).outerHTML += `<div class="label" id="player${players}-out"><div>0</div></div>`;
+        document.getElementById(`player${players}17`).outerHTML += `<div class="label" id="player${players}-in">   <div>0</div></div>`;
+        document.getElementById(`player${players}-in`).outerHTML += `<div><div class="label" id="player${players}-total">0</div></div>`;
         pCollection.add(`player${players}`);
         $(`#players-container${players}`).animate({
             marginLeft: "0"
@@ -389,7 +374,7 @@ function renderPlayers() {
                 }
             }
         }
-
+        modalShowPlayers();
     } else {
         alert("Max of 4 players!");
     }
@@ -415,7 +400,7 @@ function changeName(event) {
                 $(event.target).css("color", "black");
             }
         } else if (playerIndex == 3) {
-            if (nameArr[0] === newName || nameArr[1] === newName || nameArr[3] == newName) {
+            if (nameArr[0] === newName || nameArr[1] === newName || nameArr[3] === newName) {
                 event.target.value = "";
             } else {
                 nameArr[2] = newName;
@@ -429,6 +414,7 @@ function changeName(event) {
                 $(event.target).css("color", "black");
             }
         }
+        modalShowPlayers();
     }
 }
 

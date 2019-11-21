@@ -12,6 +12,7 @@ class Player{
     constructor(name){
         this.scores = [];
         this.name = name;
+        this.active = true;
     }
     returnScores() {
         return this.scores();
